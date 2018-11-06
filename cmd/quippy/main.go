@@ -4,8 +4,8 @@ import (
 	"os"
 	"time"
 
-	"github.com/mdease/quippy/pkg/callbacks"
 	"github.com/bwmarrin/discordgo"
+	"github.com/mdease/quippy/pkg/callbacks"
 )
 
 func main() {
