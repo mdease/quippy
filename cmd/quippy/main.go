@@ -4,7 +4,7 @@ import (
 	"os"
 	"time"
 
-	"../../pkg/callbacks"
+	"github.com/mdease/quippy/pkg/callbacks"
 	"github.com/bwmarrin/discordgo"
 )
 
