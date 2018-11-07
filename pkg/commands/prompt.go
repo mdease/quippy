@@ -62,27 +62,29 @@ func sendPromptMessage(s *discordgo.Session, user *discordgo.User, prompts []*db
 	}
 
 	// Send the prompts as separate messages
-	replies := []string{}
-
 	if len(prompts) == 1 {
-		replies = append(replies, "**Here is your prompt**:")
+		s.ChannelMessageSend(channel.ID, "**Here is your prompt**:")
 	} else {
-		replies = append(replies, "**Here are your prompts**:")
+		s.ChannelMessageSend(channel.ID, "**Here are your prompts**:")
 	}
 
 	for i, p := range prompts {
 		index := strconv.FormatInt(int64(i + 1), 10)
 		qindex := strconv.FormatInt(int64(p.Index), 10)
-		reply := index + ". (#" + qindex + ") " + p.Question
+		prompt := index + ". (#" + qindex + ") " + p.Question
 
-		replies = append(replies, reply)
+		message, err := s.ChannelMessageSend(channel.ID, prompt)
+
+		if err != nil {
+			return
+		}
+
+		// Add thumbs up and down buttons
+		s.MessageReactionAdd(channel.ID, message.ID, "\xF0\x9F\x91\x8D")
+		s.MessageReactionAdd(channel.ID, message.ID, "\xF0\x9F\x91\x8E")
 	}
 
-	replies = append(replies,
+	s.ChannelMessageSend(channel.ID,
 		"Respond to each prompt with its list position followed by your response (e.g. 1 Stella and Oliver).\n" +
 		"React to each prompt with thumbs up or thumbs down to make it appear more or less often, respectively.")
-
-	for _, r := range replies {
-		s.ChannelMessageSend(channel.ID, r)
-	}
 }
