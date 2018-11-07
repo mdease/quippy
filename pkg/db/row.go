@@ -12,6 +12,8 @@ type Row struct {
 	Question string
 	NumBlanks int64
 	Weight int64
+	Answers []string
+	RespondentIDs []string
 }
 
 // Create a new Row object based on the csv string data

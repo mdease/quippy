@@ -46,7 +46,9 @@ func handleGuildMessage(s *discordgo.Session, m *discordgo.MessageCreate) {
 	// Make sure the command is valid
 	switch cmd {
 	case "help":
-		reply = commands.Help(cmd, args)
+		reply = commands.Help(args)
+	case "prompt":
+		reply = commands.Prompt(s, m.Author, args)
 	default:
 	}
 

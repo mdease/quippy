@@ -10,6 +10,7 @@ import (
 )
 
 // Start the bot!
+// This bot is currently intended to run in only one guild.
 func main() {
 	// Fetch the bot token
 	token, found := os.LookupEnv("BOT_TOKEN")
@@ -38,7 +39,7 @@ func main() {
 	// Set Discord event handlers
 	session.AddHandler(callbacks.MessageCreate)
 
-	time.Sleep(1 * time.Second)
+	time.Sleep(30 * time.Second)
 
 	// Remember to close the session
 	defer session.Close()
