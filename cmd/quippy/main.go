@@ -5,31 +5,44 @@ import (
 	"time"
 
 	"github.com/bwmarrin/discordgo"
-	"github.com/mdease/quippy/pkg/callbacks"
+	"../../pkg/db"
+	"../../pkg/callbacks"
 )
 
+// Start the bot!
 func main() {
+	// Fetch the bot token
 	token, found := os.LookupEnv("BOT_TOKEN")
 
 	if !found || token == "" {
-		panic("Bot token not found!")
+		panic("Bot token not found")
 	}
 
+	// Create a Discord session
 	session, err := discordgo.New("Bot " + token)
 
 	if err != nil {
-		panic("Could not create session!")
+		panic("Could not create session")
 	}
 
+	// Open the session
 	err = session.Open()
 
 	if err != nil {
-		panic("Could not establish session!")
+		panic("Could not establish session")
 	}
 
+	// Load the database of questions
+	db.Load()
+
+	// Set Discord event handlers
 	session.AddHandler(callbacks.MessageCreate)
 
-	time.Sleep(30 * time.Second)
+	time.Sleep(1 * time.Second)
 
+	// Remember to close the session
 	defer session.Close()
+
+	// Save any changes to the database
+	defer db.Save()
 }
