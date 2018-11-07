@@ -2,7 +2,6 @@ package db
 
 import (
 	"encoding/csv"
-	"fmt"
 	"bufio"
 	"math/rand"
 	"os"
@@ -33,7 +32,6 @@ func Load() {
 	db_temp, err := reader.ReadAll()
 
 	if err != nil {
-		fmt.Println(err)
 		panic("Could not load database")
 	}
 
@@ -53,8 +51,6 @@ func Load() {
 		db[i] = newRow
 		totalWeight += newRow.Weight
 	}
-
-	fmt.Println(totalWeight)
 }
 
 // Save the database of questions
@@ -103,7 +99,12 @@ func Sample() *Row {
 	r := int64(rand.Intn(int(totalWeight)))
 
 	for _, row := range db {
-		r -= row.Weight
+		weight := row.Weight
+
+		// Fields might have negative weight
+		if weight > 0 {
+			r -= weight
+		}
 
 		if r < 0 {
 			return row

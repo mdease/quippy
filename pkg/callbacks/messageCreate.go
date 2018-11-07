@@ -3,6 +3,7 @@ package callbacks
 import (
 	"strings"
 
+	"../commands"
 	"github.com/bwmarrin/discordgo"
 )
 
@@ -34,6 +35,23 @@ func handleDirectMessage(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 // Handle a Discord guild message
 func handleGuildMessage(s *discordgo.Session, m *discordgo.MessageCreate) {
+	// Get the command
+	strs := strings.Split(m.Content, " ")
+	cmd := strs[0][2:]
+	args := strs[1:]
+
 	// Construct a reply message
-	s.ChannelMessageSend(m.ChannelID, "hi :)")
+	reply := ""
+
+	// Make sure the command is valid
+	switch cmd {
+	case "help":
+		reply = commands.Help(cmd, args)
+	default:
+	}
+
+	// Send the reply
+	if len(reply) > 0 {
+		s.ChannelMessageSend(m.ChannelID, reply)
+	}
 }
