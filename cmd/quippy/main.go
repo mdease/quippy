@@ -39,7 +39,7 @@ func main() {
 	// Set Discord event handlers
 	session.AddHandler(callbacks.MessageCreate)
 
-	time.Sleep(30 * time.Second)
+	time.Sleep(60 * time.Second)
 
 	// Remember to close the session
 	defer session.Close()

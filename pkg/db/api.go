@@ -5,6 +5,7 @@ import (
 	"bufio"
 	"math/rand"
 	"os"
+	"time"
 )
 
 
@@ -51,6 +52,9 @@ func Load() {
 		db[i] = newRow
 		totalWeight += newRow.Weight
 	}
+
+	// Seed the RNG
+	rand.Seed(time.Now().UTC().UnixNano())
 }
 
 // Save the database of questions

@@ -45,3 +45,8 @@ func GetPrompts(user *discordgo.User, num int) []*db.Row {
 
 	return prompts
 }
+
+// Get outstanding prompts for the user
+func GetOutstandingPrompts(user *discordgo.User) []*db.Row {
+	return pendingQuestions[user.ID]
+}
