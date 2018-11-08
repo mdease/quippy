@@ -114,7 +114,7 @@ func MessageReactionAdd(s *discordgo.Session, m *discordgo.MessageReactionAdd) {
 
 			// Calculate and record the score
 			var score int
-			if score = len(votes1) - len(votes2); score < 0 {
+			if score = (len(votes1) - len(votes2)) * 200; score < 0 {
 				score = -score
 			}
 

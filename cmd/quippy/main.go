@@ -39,7 +39,12 @@ func main() {
 	session.AddHandler(callbacks.MessageCreate)
 	session.AddHandler(callbacks.MessageReactionAdd)
 
-	time.Sleep(60 * time.Second)
+	// Keep the bot running
+	for {
+		time.Sleep(1 * time.Hour)
+	}
+
+	// TODO kill signal?
 
 	// Remember to close the session
 	defer session.Close()
