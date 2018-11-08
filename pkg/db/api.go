@@ -9,6 +9,15 @@ import (
 )
 
 
+// Object representing a prompt sent to a user
+type Prompt struct {
+	Index int
+	Question string
+	ChannelID string
+	Answers []string
+	RespondentIDs []string
+}
+
 const path string = "./res/prod.csv"
 
 // Columns: question, num blanks, weight
@@ -48,7 +57,7 @@ func Load() {
 
 	// Create a Row object for each row
 	for i, row := range db_temp {
-		newRow := NewRow(i, row)
+		newRow := NewRow(row)
 		db[i] = newRow
 		totalWeight += newRow.Weight
 	}
@@ -99,10 +108,10 @@ func Save() {
 }
 
 // Randomly select a question based on weights
-func Sample() *Row {
+func Sample(channelID string) *Prompt {
 	r := int64(rand.Intn(int(totalWeight)))
 
-	for _, row := range db {
+	for i, row := range db {
 		weight := row.Weight
 
 		// Fields might have negative weight
@@ -111,11 +120,11 @@ func Sample() *Row {
 		}
 
 		if r < 0 {
-			return row
+			return &Prompt { Index: i, Question: row.Question, ChannelID: channelID }
 		}
 	}
 
-	panic("Fatal error")
+	panic("Could not retrieve prompt")
 }
 
 // Increase a question's weight (max 5)

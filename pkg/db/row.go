@@ -8,16 +8,13 @@ import (
 
 // Object representing a row in the question database
 type Row struct {
-	Index int
 	Question string
 	NumBlanks int64
 	Weight int64
-	Answers []string
-	RespondentIDs []string
 }
 
 // Create a new Row object based on the csv string data
-func NewRow(i int, row []string) *Row {
+func NewRow(row []string) *Row {
 	question := row[0]
 
 	// Parse the numBlanks field
@@ -36,7 +33,7 @@ func NewRow(i int, row []string) *Row {
 		panic("Error parsing database")
 	}
 
-	return &Row { Index: i, Question: question, NumBlanks: numBlanks, Weight: weight }
+	return &Row { Question: question, NumBlanks: numBlanks, Weight: weight }
 }
 
 // Return the given Row object as its csv representation

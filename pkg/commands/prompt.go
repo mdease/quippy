@@ -10,7 +10,7 @@ import (
 
 
 // Send prompts to the user via direct message
-func Prompt(s *discordgo.Session, user *discordgo.User, args []string) string {
+func Prompt(s *discordgo.Session, user *discordgo.User, channelID string, args []string) string {
 	// First check if the user has any outstanding prompts
 	outstanding := state.GetOutstandingPrompts(user)
 
@@ -37,7 +37,7 @@ func Prompt(s *discordgo.Session, user *discordgo.User, args []string) string {
 	}
 	
 	// Get the prompts
-	prompts := state.GetPrompts(user, int(numPrompts))
+	prompts := state.GetPrompts(user, channelID, int(numPrompts))
 
 	// Send the prompts
 	sendPromptMessage(s, user, prompts)
@@ -53,7 +53,7 @@ func Prompt(s *discordgo.Session, user *discordgo.User, args []string) string {
 }
 
 // Send a messages to the user with the prompts
-func sendPromptMessage(s *discordgo.Session, user *discordgo.User, prompts []*db.Row) {
+func sendPromptMessage(s *discordgo.Session, user *discordgo.User, prompts []*db.Prompt) {
 	// Create a DM channel
 	channel, err := s.UserChannelCreate(user.ID)
 

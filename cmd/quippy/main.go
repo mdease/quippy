@@ -10,7 +10,6 @@ import (
 )
 
 // Start the bot!
-// This bot is currently intended to run in only one guild.
 func main() {
 	// Fetch the bot token
 	token, found := os.LookupEnv("BOT_TOKEN")

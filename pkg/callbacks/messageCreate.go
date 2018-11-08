@@ -1,9 +1,11 @@
 package callbacks
 
 import (
+	"strconv"
 	"strings"
 
 	"../commands"
+	"../state"
 	"github.com/bwmarrin/discordgo"
 )
 
@@ -29,8 +31,25 @@ func MessageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 // Handle a direct Discord message
 func handleDirectMessage(s *discordgo.Session, m *discordgo.MessageCreate) {
-	// Construct a reply message
-	s.ChannelMessageSend(m.ChannelID, "hello :)")
+	// Get the prompt index and response
+	message := strings.TrimSpace(m.Content)
+	split := strings.Index(message, " ")
+
+	if split < 0 {
+		return
+	}
+
+	indexStr := m.Content[:split]
+	index, err := strconv.ParseInt(indexStr, 10, 64)
+
+	if err != nil {
+		return
+	}
+
+	response := message[split + 1:]
+
+	// Record the response
+	state.RecordResponse(s, m.Author, int(index), response)
 }
 
 // Handle a Discord guild message
@@ -48,7 +67,9 @@ func handleGuildMessage(s *discordgo.Session, m *discordgo.MessageCreate) {
 	case "help":
 		reply = commands.Help(args)
 	case "prompt":
-		reply = commands.Prompt(s, m.Author, args)
+		reply = commands.Prompt(s, m.Author, m.ChannelID, args)
+	case "scores":
+		reply = commands.Scores(m.GuildID)
 	default:
 	}
 
